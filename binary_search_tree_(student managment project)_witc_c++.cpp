@@ -8,7 +8,7 @@
                                                                                 submision date : 10-2-2023
 
 */
-#include<iostream>
+#include <iostream>
 #include <bits/stdc++.h>
 #include <fstream>
 #include <string>
