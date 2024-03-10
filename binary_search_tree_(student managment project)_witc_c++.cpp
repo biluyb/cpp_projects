@@ -1,11 +1,10 @@
-              // FINDING MIN AND MAX with BST
+// FINDING MIN AND MAX with BST
 /*
                     NAME                     ID
-            1. BILILIGN YIBGETA           
+            1. BILILIGN YIBGETA
 
 
-                                                                                submite to:
-                                                                                submision date : 10-2-2023
+                                                                                submision. date : 10-2-2023
 
 */
 #include <iostream>
@@ -17,7 +16,7 @@ using namespace std;
 fstream student;
 struct Student
 {
-   // Student *right and Student *left we need both for traversing to thr right and left of the three in the entire code
+    // Student *right and Student *left we need both for traversing to thr right and left of the three in the entire code
     Student *left;
     Student *right;
     int id;
@@ -25,7 +24,6 @@ struct Student
     int age;
     char gender;
     double year;
-
 };
 
 // first creat the root node or just a node
@@ -69,7 +67,7 @@ void write(Student *&root)
             {
                 write(root->left);
             }
-            student <<"ID:" << root->id << endl;
+            student << "ID:" << root->id << endl;
             student << "Name:" << root->name << endl;
             student << "Age:" << root->age << endl;
             student << "gender:" << root->gender << endl;
@@ -107,7 +105,7 @@ int minId(Student *root)
 // RETRIVE INTERMS OF  Post Order
 void displayPostOrder(Student *root)
 {
-    
+
     if (root != NULL)
     {
         displayPostOrder(root->left);
@@ -124,9 +122,7 @@ void inorder(Student *root)
         inorder(root->left);
         cout << root->id << "\t";
         inorder(root->right);
-    
     }
-    
 }
 
 // retrive interms of  Pre order
@@ -139,7 +135,6 @@ void Preorder(Student *root)
         Preorder(root->left);
         Preorder(root->right);
     }
-    
 }
 
 // Display maximum id from the tree
@@ -180,7 +175,6 @@ int countStudent(Student *root)
     }
 }
 
-
 // read from file to screen
 void read()
 {
@@ -205,7 +199,6 @@ Student *search(Student *root, int key)
         if (root->id = key)
         {
             return root;
-
         }
 
         if (root->id < key)
@@ -222,38 +215,48 @@ Student *search(Student *root, int key)
     }
 }
 
-Student *minValeNode(Student* node){
-    Student* current=node;
+Student *minValeNode(Student *node)
+{
+    Student *current = node;
 
     // find the most left leaf
-    while(current && current->left!=NULL){
-        current=current->left;
+    while (current && current->left != NULL)
+    {
+        current = current->left;
     }
 
     return current;
 }
 
-    // Delete Node
-    Student *
-    deleteNode(Student *root, int id)
+// Delete Node
+Student *
+deleteNode(Student *root, int id)
 {
-    if(root==NULL){
+    if (root == NULL)
+    {
         return root;
     }
 
-    if(id< root->id){
-        root->left=deleteNode(root->left, id);
-    }else if(id> root->id){
-        root->right= deleteNode(root->right, id);
-    }else{
+    if (id < root->id)
+    {
+        root->left = deleteNode(root->left, id);
+    }
+    else if (id > root->id)
+    {
+        root->right = deleteNode(root->right, id);
+    }
+    else
+    {
         // the node has no child
-        if(root->left==NULL and root->right==NULL){
+        if (root->left == NULL and root->right == NULL)
+        {
             return NULL;
         }
 
         // node only one child
-        else if(root->left==NULL){
-            Student* temp=root->right;
+        else if (root->left == NULL)
+        {
+            Student *temp = root->right;
             free(root);
             return temp;
         }
@@ -264,85 +267,83 @@ Student *minValeNode(Student* node){
             return temp;
         }
 
-        Student* temp=minValeNode(root->right);
-        root->id=temp->id;
-        root->right= deleteNode(root->right, temp->id);
+        Student *temp = minValeNode(root->right);
+        root->id = temp->id;
+        root->right = deleteNode(root->right, temp->id);
     }
     return root;
 }
-void avl(Student *root){
+void avl(Student *root)
+{
 
-
-/*
-// Traverse the skewwd binary tree and stores its nodes pointers in vectors nodes[]
-void storeBSTNodes(Student* root,vector<Student*> &nodes){
-    if(root==NULL){
-        return;
+    
+    // Traverse the skewwd binary tree and stores its nodes pointers in vectors nodes[]
+    void storeBSTNodes(Student* root,vector<Student*> &nodes){
+        if(root==NULL){
+            return;
+        }
+        storeBSTNodes(root->left,nodes);
+        nodes.push_back(root);
+        storeBSTNodes(root->right,nodes);
     }
-    storeBSTNodes(root->left,nodes);
-    nodes.push_back(root);
-    storeBSTNodes(root->right,nodes);
-}
 
 
-// Recurence Function to construct binary tree
-Student* buildTreeUtil(vector<Student*> &nodes, int start, int end){
-    if(start>end){
-        return NULL;
+    // Recurence Function to construct binary tree
+    Student* buildTreeUtil(vector<Student*> &nodes, int start, int end){
+        if(start>end){
+            return NULL;
+        }
+        // Get middle elemnt and make it root
+        int mid= (start+end)/2;
+        Student* root= nodes[mid];
+
+        // using index in Inorder Traversal construct left and right subtrees
+        root->left = buildTreeUtil(nodes, start, mid-1);
+        root->right= buildTreeUtil(nodes, mid+1,end);
+        return root;
     }
-    // Get middle elemnt and make it root
-    int mid= (start+end)/2;
-    Student* root= nodes[mid];
 
-    // using index in Inorder Traversal construct left and right subtrees
-    root->left = buildTreeUtil(nodes, start, mid-1);
-    root->right= buildTreeUtil(nodes, mid+1,end);
-    return root;
+
+    //Unbalanced BST using AVL Tree
+    Student* buildTree(Student* root){
+        // store nodes of given BST in sorted order
+        vector<Student *> nodes;
+        storeBSTNodes(root,nodes);
+
+        // construct BST from nodes
+        int n= nodes.size();
+        return buildTreeUtil(nodes,0,n-1);
+        
+    cout << "the tree is balanced completly!!" << endl;
 }
-
-
-//Unbalanced BST using AVL Tree
-Student* buildTree(Student* root){
-    // store nodes of given BST in sorted order
-    vector<Student *> nodes;
-    storeBSTNodes(root,nodes);
-
-    // construct BST from nodes
-    int n= nodes.size();
-    return buildTreeUtil(nodes,0,n-1);
-    */
-    cout<<"the tree is balanced completly!!"<<endl;
-} 
-
 
 int main()
 {
     Student *root = NULL;
-    int id, age, noreg,n,key,year;
-    int nostud =0;
+    int id, age, noreg, n, key, year;
+    int nostud = 0;
     string name;
     char gender;
 
-   
-
-        cout <<"\n #############################################################" ;
-        cout <<"\n #####                                                   #####" ;
-        cout <<"\n #####           WELCOME TO BAHIRDAR UNIVERSITY          #####" ;
-        cout <<"\n #####                                                   #####" ;
-        cout <<"\n #############################################################" << endl ;
-        cout << "\n ~~~     THIS IS  BD UNIVERSITY STUDENT   MANEGMENT  LIST    ~~~" << endl;
-        cout <<"\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" ;
-        cout << "\n"
+    cout << "\n #############################################################";
+    cout << "\n #####                                                   #####";
+    cout << "\n #####           WELCOME TO BAHIRDAR UNIVERSITY          #####";
+    cout << "\n #####                                                   #####";
+    cout << "\n #############################################################" << endl;
+    cout << "\n ~~~     THIS IS  BAHIRDAR UNIVERSITY STUDENT   MANEGMENT  LIST    ~~~" << endl;
+    cout << "\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+    cout << "\n"
          << endl;
- while (1)
+    while (1)
     {
-        if(n > 13 || n < 0){
-            cout<<"INVALID INPUT ! please choice the correct one"<<endl ;
+        if (n > 13 || n < 0)
+        {
+            cout << "INVALID INPUT ! please choice the correct one" << endl;
         }
-   
+
         cout << "\n";
         cout << "\n                 ~~  WHAT DO YOU WANT TO DO ?  ~~" << endl;
-        cout <<"\n                  ################################" << endl ;
+        cout << "\n                  ################################" << endl;
         cout << "\n";
         cout << "1. TO REGISTER new student             ~~    7. HOW MANY STUDENTS are registered " << endl;
         cout << "2. VIEW the student list               ~~    8. list of students interms of in order " << endl;
@@ -353,7 +354,7 @@ int main()
         cout << "13. form AVL tree" << endl;
         cout << "0. TO exit" << endl;
         cin >> n;
-        
+
         switch (n)
         {
         case 1:
@@ -363,7 +364,7 @@ int main()
 
             if (noreg > 0)
             {
-                cout << "FILL STUDENT INFORMATION CAREFULLY "  << endl;
+                cout << "FILL STUDENT INFORMATION CAREFULLY " << endl;
                 do
                 {
                     cout << "Enter Student id" << endl;
@@ -376,69 +377,69 @@ int main()
                     cin >> gender;
                     cout << "Enter Student year" << endl;
                     cin >> year;
-                              nostud++;
+                    nostud++;
                     add(root, id, name, age, gender, year);
                     student.open("studentList.txt", ios::app);
                     write(root);
-                    cout << "~~~ REGISTER COMPLETE~~~~"<<endl ;
-                    cout <<"~~~ PLEASE REGISTER THE NEXT STUDENT ~~" << endl;
+                    cout << "~~~ REGISTER COMPLETE~~~~" << endl;
+                    cout << "~~~ PLEASE REGISTER THE NEXT STUDENT ~~" << endl;
                 } while (nostud < noreg);
             }
 
             break;
 
         case 2:
-             read();
+            read();
             break;
         case 3:
-           cout<<"Enter ID TO search"<<endl;
-            cin>>key;
-            cout<<search(root, key)->name;
+            cout << "Enter ID TO search" << endl;
+            cin >> key;
+            cout << search(root, key)->name;
             break;
         case 4:
-           cout << "Enter ID TO delete" << endl;
+            cout << "Enter ID TO delete" << endl;
             cin >> key;
             deleteNode(root, key);
-            cout<<"After Deleting Student Record"<<endl;
+            cout << "After Deleting Student Record" << endl;
             inorder(root);
         case 5:
-           key= minId(root);
+            key = minId(root);
             deleteNode(root, key);
-            cout<<"After Deleting Minimum ID"<<endl;
+            cout << "After Deleting Minimum ID" << endl;
             inorder(root);
         case 6:
-            key=maxId(root);
-            deleteNode(root,key);
-            cout<<"After Delteing Maximum ID"<<endl;
+            key = maxId(root);
+            deleteNode(root, key);
+            cout << "After Delteing Maximum ID" << endl;
             inorder(root);
         case 7:
-            cout<<"There are "<<countStudent(root)<<"student in the list";
+            cout << "There are " << countStudent(root) << "student in the list";
             break;
         case 8:
-        inorder(root);
+            inorder(root);
             break;
-           
+
         case 9:
-         Preorder(root);
+            Preorder(root);
             break;
-            
+
         case 10:
-         displayPostOrder(root);
+            displayPostOrder(root);
             break;
         case 11:
-         minId(root);
+            minId(root);
             break;
-            
+
         case 12:
-         maxId(root);
+            maxId(root);
             break;
-           
+
         case 13:
-         avl(root);
+            avl(root);
 
         case 0:
             return 0;
         }
-    }   
-  return 0;
+    }
+    return 0;
 }
